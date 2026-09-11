@@ -1,0 +1,287 @@
+<!doctype html>
+<html>
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#0f172a">
+  <title>Gamepad Tester</title>
+  <link rel="stylesheet" href="styles.css" />
+  <script src="mapping.js"></script>
+</head>
+
+<body>
+
+  <div id="gamepad-layout">
+
+    <nav id="gamepad-tabs">
+      <button class="gamepad-tab active" data-gamepad-index="0">1</button>
+      <button class="gamepad-tab" data-gamepad-index="1">2</button>
+      <button class="gamepad-tab" data-gamepad-index="2">3</button>
+      <button class="gamepad-tab" data-gamepad-index="3">4</button>
+    </nav>
+
+    <main id="gamepad-content">
+      <header class="app-header">
+        <h1 class="app-title">
+          <span class="title-icon">🎮</span> GAMEPAD <span class="accent-text">TESTER</span>
+        </h1>
+        <span class="app-badge">V1.0</span>
+      </header>
+
+      <div class="controls-bar">
+        <!-- Left Side: Status & Toggle -->
+        <div class="controls-left">
+          <button id="toggle" class="btn">Pause</button>
+          <span id="status" class="status-indicator">Running</span>
+        </div>
+
+        <!-- Right Side: Mapping Selector -->
+        <div class="controls-right">
+          <label for="mapping" class="control-label">Mapping:</label>
+          <select id="mapping" class="select-input">
+            <option value="auto">Auto Detect</option>
+            <option value="xbox">Xbox</option>
+            <option value="dualsense">DualSense</option>
+            <option value="unknown">Generic / Raw</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="gamepad-info">
+        <div class="info-item info-id">
+          <span class="info-label">Gamepad ID</span>
+          <span id="gamepad-id" class="info-value">Waiting for input. Move your controller when plugged in.</span>
+        </div>
+
+        <div class="info-stats-row">
+          <div class="info-item">
+            <span class="info-label">Polling Rate</span>
+            <span id="tick-rate" class="info-value">0 Hz</span>
+          </div>
+          <div class="info-item">
+            <span class="info-label">Buttons</span>
+            <span id="button-count" class="info-value">0</span>
+          </div>
+          <div class="info-item">
+            <span class="info-label">Axes</span>
+            <span id="axis-count" class="info-value">0</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="vibration-container">
+        <div class="vibration-status-group">
+          <span>Rumble Engine:</span>
+          <span id="vibration-status">Not available</span>
+        </div>
+        <button id="vibration-test" class="btn" disabled>
+          <span>Trigger Vibration</span>
+        </button>
+      </div>
+
+      <h3>Control Groups</h3>
+
+      <div id="button-groups">
+        <!-- D-Pad (Left Side) -->
+        <div class="button-group">
+          <div class="button-group-header">D-Pad</div>
+          <div class="button-group-content">
+            <div id="button-12" class="gamepad-button hidden">
+              <span class="gamepad-button-label">Up (12)</span>
+              <div class="gamepad-button-track">
+                <div class="gamepad-button-progress"></div>
+                <span class="gamepad-button-value">0</span>
+              </div>
+            </div>
+            <div id="button-13" class="gamepad-button hidden">
+              <span class="gamepad-button-label">Down (13)</span>
+              <div class="gamepad-button-track">
+                <div class="gamepad-button-progress"></div>
+                <span class="gamepad-button-value">0</span>
+              </div>
+            </div>
+            <div id="button-14" class="gamepad-button hidden">
+              <span class="gamepad-button-label">Left (14)</span>
+              <div class="gamepad-button-track">
+                <div class="gamepad-button-progress"></div>
+                <span class="gamepad-button-value">0</span>
+              </div>
+            </div>
+            <div id="button-15" class="gamepad-button hidden">
+              <span class="gamepad-button-label">Right (15)</span>
+              <div class="gamepad-button-track">
+                <div class="gamepad-button-progress"></div>
+                <span class="gamepad-button-value">0</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Face Buttons (Right Side) -->
+        <div class="button-group">
+          <div class="button-group-header">Face Buttons</div>
+          <div class="button-group-content">
+            <div id="button-0" class="gamepad-button hidden">
+              <span class="gamepad-button-label">Action S (0)</span>
+              <div class="gamepad-button-track">
+                <div class="gamepad-button-progress"></div>
+                <span class="gamepad-button-value">0</span>
+              </div>
+            </div>
+            <div id="button-1" class="gamepad-button hidden">
+              <span class="gamepad-button-label">Action E (1)</span>
+              <div class="gamepad-button-track">
+                <div class="gamepad-button-progress"></div>
+                <span class="gamepad-button-value">0</span>
+              </div>
+            </div>
+            <div id="button-2" class="gamepad-button hidden">
+              <span class="gamepad-button-label">Action W (2)</span>
+              <div class="gamepad-button-track">
+                <div class="gamepad-button-progress"></div>
+                <span class="gamepad-button-value">0</span>
+              </div>
+            </div>
+            <div id="button-3" class="gamepad-button hidden">
+              <span class="gamepad-button-label">Action N (3)</span>
+              <div class="gamepad-button-track">
+                <div class="gamepad-button-progress"></div>
+                <span class="gamepad-button-value">0</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Bumpers & Triggers -->
+        <div class="button-group">
+          <div class="button-group-header">Top Shoulder / Triggers</div>
+          <div class="button-group-content">
+            <div id="button-4" class="gamepad-button hidden">
+              <span class="gamepad-button-label">L1 / LB (4)</span>
+              <div class="gamepad-button-track">
+                <div class="gamepad-button-progress"></div>
+                <span class="gamepad-button-value">0</span>
+              </div>
+            </div>
+            <div id="button-6" class="gamepad-button hidden">
+              <span class="gamepad-button-label">L2 / LT (6)</span>
+              <div class="gamepad-button-track">
+                <div class="gamepad-button-progress"></div>
+                <span class="gamepad-button-value">0</span>
+              </div>
+            </div>
+            <div id="button-5" class="gamepad-button hidden">
+              <span class="gamepad-button-label">R1 / RB (5)</span>
+              <div class="gamepad-button-track">
+                <div class="gamepad-button-progress"></div>
+                <span class="gamepad-button-value">0</span>
+              </div>
+            </div>
+            <div id="button-7" class="gamepad-button hidden">
+              <span class="gamepad-button-label">R2 / RT (7)</span>
+              <div class="gamepad-button-track">
+                <div class="gamepad-button-progress"></div>
+                <span class="gamepad-button-value">0</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Center & System Buttons -->
+        <div class="button-group">
+          <div class="button-group-header">Center & System</div>
+          <div class="button-group-content">
+            <div id="button-8" class="gamepad-button hidden">
+              <span class="gamepad-button-label">Select (8)</span>
+              <div class="gamepad-button-track">
+                <div class="gamepad-button-progress"></div>
+                <span class="gamepad-button-value">0</span>
+              </div>
+            </div>
+            <div id="button-9" class="gamepad-button hidden">
+              <span class="gamepad-button-label">Start (9)</span>
+              <div class="gamepad-button-track">
+                <div class="gamepad-button-progress"></div>
+                <span class="gamepad-button-value">0</span>
+              </div>
+            </div>
+            <div id="button-16" class="gamepad-button hidden">
+              <span class="gamepad-button-label">Home (16)</span>
+              <div class="gamepad-button-track">
+                <div class="gamepad-button-progress"></div>
+                <span class="gamepad-button-value">0</span>
+              </div>
+            </div>
+            <div id="button-17" class="gamepad-button hidden">
+              <span class="gamepad-button-label">Touch (17)</span>
+              <div class="gamepad-button-track">
+                <div class="gamepad-button-progress"></div>
+                <span class="gamepad-button-value">0</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Stick Press Buttons -->
+        <div class="button-group">
+          <div class="button-group-header">Stick Clicks</div>
+          <div class="button-group-content">
+            <div id="button-10" class="gamepad-button hidden">
+              <span class="gamepad-button-label">L3 / L-Stick (10)</span>
+              <div class="gamepad-button-track">
+                <div class="gamepad-button-progress"></div>
+                <span class="gamepad-button-value">0</span>
+              </div>
+            </div>
+            <div id="button-11" class="gamepad-button hidden">
+              <span class="gamepad-button-label">R3 / R-Stick (11)</span>
+              <div class="gamepad-button-track">
+                <div class="gamepad-button-progress"></div>
+                <span class="gamepad-button-value">0</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <h3>Sticks</h3>
+
+      <div id="sticks">
+        <div id="stick-0" class="gamepad-stick hidden">
+          <div class="gamepad-stick-header">
+            <span class="gamepad-stick-label">Left Stick</span>
+            <span class="gamepad-stick-values">0.000, 0.000</span>
+          </div>
+
+          <div class="gamepad-stick-radar">
+            <div class="gamepad-stick-grid"></div>
+            <div class="gamepad-stick-crosshair horizontal"></div>
+            <div class="gamepad-stick-crosshair vertical"></div>
+            <div class="gamepad-stick-ring"></div>
+            <div class="gamepad-stick-dot"></div>
+          </div>
+        </div>
+
+        <div id="stick-1" class="gamepad-stick hidden">
+          <div class="gamepad-stick-header">
+            <span class="gamepad-stick-label">Right Stick</span>
+            <span class="gamepad-stick-values">0.000, 0.000</span>
+          </div>
+
+          <div class="gamepad-stick-radar">
+            <div class="gamepad-stick-grid"></div>
+            <div class="gamepad-stick-crosshair horizontal"></div>
+            <div class="gamepad-stick-crosshair vertical"></div>
+            <div class="gamepad-stick-ring"></div>
+            <div class="gamepad-stick-dot"></div>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+</body>
+
+<script src="script.js"></script>
+
+</html>

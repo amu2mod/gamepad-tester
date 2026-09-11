@@ -1,0 +1,70 @@
+const xbox_mapping = [
+    "A",       // Button 0
+    "B",       // Button 1
+    "X",       // Button 2
+    "Y",       // Button 3
+    "LB",      // Button 4
+    "RB",      // Button 5
+    "LT",      // Button 6
+    "RT",      // Button 7
+    "View",    // Button 8
+    "Menu",   // Button 9
+    "LS",      // Button 10
+    "RS",      // Button 11
+    "D-Up",    // Button 12
+    "D-Down",  // Button 13
+    "D-Left",  // Button 14
+    "D-Right", // Button 15
+    "Xbox",        // Button 16
+    "",        // Button 17
+    "",        // Button 18
+    "",        // Button 19
+    "",        // Button 20
+    "",        // Button 21
+    "",        // Button 22
+    "",        // Button 23
+    "",        // Button 24
+    "",        // Button 25
+    "",        // Button 26
+    "",        // Button 27
+    "",        // Button 28
+    "",        // Button 29
+    "",        // Button 30
+    ""         // Button 31
+];
+
+const dualsense_mapping = [
+    "✖",       // Button 0
+    "〇",       // Button 1
+    "☐",       // Button 2
+    "△",       // Button 3
+    "LB",      // Button 4
+    "RB",      // Button 5
+    "LT",      // Button 6
+    "RT",      // Button 7
+    "Create",    // Button 8
+    "Options",   // Button 9
+    "LS",      // Button 10
+    "RS",      // Button 11
+    "D-Up",    // Button 12
+    "D-Down",  // Button 13
+    "D-Left",  // Button 14
+    "D-Right", // Button 15
+    "PS",        // Button 16
+    "Touchpad",        // Button 17
+    "",        // Button 18 
+    "",        // Button 19
+    "",        // Button 20
+    "",        // Button 21
+    "",        // Button 22
+    "",        // Button 23
+    "",        // Button 24
+    "",        // Button 25
+    "",        // Button 26
+    "",        // Button 27
+    "",        // Button 28
+    "",        // Button 29
+    "",        // Button 30
+    ""         // Button 31
+];
+

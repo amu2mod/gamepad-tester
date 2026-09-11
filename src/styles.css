@@ -1,0 +1,712 @@
+:root {
+  --bg-primary: #0a0c10;
+  --bg-surface: #12161f;
+  --bg-card: #1a202c;
+  --border-color: #2a3447;
+
+  --accent-color: #718096;
+  --accent-glow: rgba(113, 128, 150, 0.25);
+  --accent-glow-strong: rgba(0, 240, 255, 0.65);
+  --bg-card: #1a202c;
+  --text-highlight: #e2e8f0;
+
+  --accent-cyan: #00f2fe;
+  --accent-blue: #0077ff;
+  --accent-green: #00ff88;
+  --accent-red: #ff3366;
+
+  --text-main: #f0f4f8;
+  --text-muted: #64748b;
+  --font-mono:
+    "JetBrains Mono", "Fira Code", "Roboto Mono", Consolas, monospace;
+}
+
+/* Xbox Vibe (Green) */
+[data-theme="xbox"] {
+  --accent-color: #107c41;
+  --accent-glow: rgba(16, 124, 65, 0.6);
+  --accent-glow-strong: rgba(0, 255, 102, 0.65);
+  --text-highlight: #107c41;
+}
+
+/* PlayStation Vibe (Blue) */
+[data-theme="dualsense"] {
+  --accent-color: #00439c;
+  --accent-glow: rgba(0, 67, 156, 0.6);
+  --accent-glow-strong: rgba(0, 153, 255, 0.65);
+  --text-highlight: #2e6db4;
+}
+
+/* Fallback for explicit unknown mapping */
+[data-theme="unknown"] {
+  --accent-color: #4a5568;
+  --accent-glow: rgba(74, 85, 104, 0.6);
+  --accent-glow-strong: rgba(0, 240, 255, 0.65);
+}
+
+body {
+  margin: 0;
+  padding: 32px;
+  background-color: var(--bg-primary);
+  color: var(--text-main);
+  font-family:
+    -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial,
+    sans-serif;
+  min-height: 100vh;
+  box-sizing: border-box;
+}
+
+/* Base Headings & Section Dividers */
+h3 {
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: var(--text-muted);
+  margin: 28px 0 16px 0;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+h3::after {
+  content: "";
+  flex: 1;
+  height: 1px;
+  background: linear-gradient(90deg, var(--border-color), transparent);
+}
+
+/* ============================================================
+ * Gamepad layout / tabs
+ * ============================================================ */
+
+/* Smooth color transition when active gamepad changes */
+body,
+.gamepad-tab,
+.gamepad-button,
+.gamepad-stick-dot {
+  transition:
+    background-color 0.3s ease,
+    border-color 0.3s ease,
+    box-shadow 0.3s ease;
+}
+
+#gamepad-layout {
+  display: flex;
+  align-items: flex-start;
+  gap: 28px;
+  max-width: 1000px;
+  margin: 0 auto;
+}
+
+#gamepad-tabs {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  flex: 0 0 auto;
+  position: sticky;
+  top: 20px;
+  padding-right: 16px;
+  border-right: 1px solid var(--border-color);
+}
+
+.gamepad-tab {
+  width: 44px;
+  height: 44px;
+  padding: 0;
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  background: var(--bg-surface);
+  color: var(--text-muted);
+  cursor: pointer;
+  font-family: var(--font-mono);
+  font-size: 15px;
+  font-weight: 700;
+  transition: all 0.2s ease;
+}
+
+.gamepad-tab:hover {
+  border-color: var(--accent-cyan);
+  color: var(--text-main);
+  background: rgba(0, 242, 254, 0.05);
+}
+
+.gamepad-tab.active {
+  background: linear-gradient(135deg, var(--accent-blue), var(--accent-cyan));
+  border-color: var(--accent-cyan);
+  color: var(--text-highlight);
+}
+
+.gamepad-tab.disabled {
+  opacity: 0.3;
+  pointer-events: none;
+  border-color: transparent;
+}
+
+#gamepad-content {
+  flex: 1;
+  min-width: 0;
+}
+
+/* Top Bar: Status & Toggle */
+#gamepad-content > p:first-child {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-top: 0;
+}
+
+#toggle {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-color);
+  color: var(--text-main);
+  padding: 8px 18px;
+  border-radius: 6px;
+  font-family: var(--font-mono);
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+#toggle:hover {
+  border-color: var(--accent-cyan);
+  box-shadow: 0 0 8px rgba(0, 242, 254, 0.2);
+}
+
+#status {
+  font-family: var(--font-mono);
+  font-size: 0.85rem;
+  color: var(--accent-green);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+/* Paused State */
+#status.paused {
+  color: #f59e0b; /* Orange */
+}
+
+.controls-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between; /* Pushes left and right groups apart */
+  border-radius: 8px;
+  margin-bottom: 12px;
+}
+
+/* Left Group (Toggle & Status) */
+.controls-left {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+/* Right Group (Mapping Dropdown) */
+.controls-right {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-left: auto; /* Guarantees right alignment */
+}
+
+.control-label {
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--text-muted, #718096);
+}
+
+.select-input {
+  background-color: var(--bg-input, #2d3748);
+  color: var(--text-highlight, #e2e8f0);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  padding: 6px 10px;
+  border-radius: 6px;
+  font-size: 0.85rem;
+  outline: none;
+  cursor: pointer;
+  transition: border-color 0.2s ease;
+}
+
+.select-input:hover,
+.select-input:focus {
+  border-color: var(--accent-color, #3182ce);
+}
+
+/* ============================================================
+ * Gamepad Information Card
+ * ============================================================ */
+
+#gamepad-info {
+  /* background: var(--bg-surface); */
+  border: 1px solid var(--border-color);
+  font-family: var(--font-mono);
+
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  background-color: var(--bg-card, #1a202c);
+  padding: 12px;
+  border-radius: 8px;
+}
+
+/* Line 1: Full-width ID block */
+.info-id {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.info-id #gamepad-id {
+  font-family: var(--font-mono, monospace);
+  font-size: 0.85rem;
+  word-break: break-all; /* Handles long vendor strings cleanly */
+}
+
+/* Line 2: 3-column grid for Polling Rate / Buttons / Axes */
+.info-stats-row {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+  padding-top: 6px;
+  border-top: 1px solid rgba(255, 255, 255, 0.08); /* Subtle separator line */
+}
+
+/* Common stat box formatting */
+.info-item {
+  display: flex;
+  flex-direction: column;
+}
+
+.info-label {
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--text-muted, #718096);
+}
+
+.info-value {
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--text-highlight, #e2e8f0);
+}
+
+.gamepad-info-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: var(--bg-card);
+  padding: 8px 12px;
+  border-radius: 6px;
+  border: 1px solid rgba(255, 255, 255, 0.03);
+  gap: 16px;
+}
+
+.gamepad-info-label {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+}
+
+.gamepad-info-value {
+  color: var(--accent-cyan);
+  font-weight: 600;
+}
+
+/* Mapping & Vibration Settings */
+#mapping-selector {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: var(--bg-surface);
+  padding: 12px 16px;
+  border-radius: 8px;
+  border: 1px solid var(--border-color);
+}
+
+label[for="mapping"] {
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  font-family: var(--font-mono);
+}
+
+select#mapping {
+  background: var(--bg-card);
+  color: var(--text-main);
+  border: 1px solid var(--border-color);
+  padding: 6px 12px;
+  border-radius: 6px;
+  font-family: var(--font-mono);
+  outline: none;
+}
+
+/* Minimalist, borderless vibration control panel */
+.vibration-container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 14px;
+  background: rgba(255, 255, 255, 0.02);
+  border-radius: 8px;
+  backdrop-filter: blur(8px);
+  margin-top: 12px;
+}
+
+/* Status indicator badge */
+.vibration-status-group {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.8rem;
+  color: var(--text-muted, #718096);
+}
+
+#vibration-status {
+  font-size: 0.75rem;
+  font-weight: 600;
+  padding: 2px 8px;
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.05);
+  color: var(--text-muted, #a0aec0);
+  transition: all 0.2s ease;
+}
+
+/* Active status indicator pill */
+#vibration-status.available {
+  color: white;
+  background: var(--accent-glow, rgba(16, 124, 65, 0.2));
+}
+
+/* Styled Rumble Button */
+#vibration-test {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: transparent;
+  color: var(--text-highlight, #e2e8f0);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  padding: 6px 14px;
+  border-radius: 6px;
+  font-size: 0.8rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+#vibration-test:hover:not(:disabled) {
+  color: white;
+  border-color: var(--accent-color, #3182ce);
+  background: var(--accent-glow, rgba(49, 130, 206, 0.15));
+  box-shadow: 0 0 12px var(--accent-glow, rgba(49, 130, 206, 0.2));
+  transform: translateY(-1px);
+}
+
+#vibration-test:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+  border-color: transparent;
+}
+
+/* ============================================================
+ * Buttons Visualizer
+ * ============================================================ */
+
+#buttons {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  gap: 8px;
+}
+
+.gamepad-button {
+  display: flex;
+  align-items: center;
+  height: 32px;
+  background: var(--bg-surface);
+  border: 1px solid var(--border-color);
+  border-radius: 6px;
+  overflow: hidden;
+  font-family: var(--font-mono);
+  background-color: var(--accent-glow);
+  border-color: var(--accent-color);
+}
+
+.gamepad-button.hidden,
+.gamepad-stick.hidden {
+  display: none !important;
+}
+
+.gamepad-button-label {
+  flex: 0 0 110px;
+  font-size: 0.75rem;
+  font-family: var(--font-mono);
+
+  /* Flex/Alignment fixes for symbols & text */
+  display: inline-flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 6px;
+  padding-left: 8px;
+
+  /* Prevents unicode shapes from shifting line-heights */
+  line-height: 1;
+  vertical-align: middle;
+}
+
+/* Optional target if your JS wraps dynamic symbols in a span */
+.gamepad-button-label span.symbol {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 16px;
+  height: 16px;
+  font-size: 0.9rem;
+  line-height: 1;
+}
+
+.gamepad-button-track {
+  position: relative;
+  flex: 1;
+  height: 100%;
+  background: var(--bg-card);
+  border-left: 1px solid var(--border-color);
+}
+
+.gamepad-button-progress {
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: var(--button-value, 0%);
+  background: linear-gradient(90deg, var(--accent-blue), var(--accent-cyan));
+  box-shadow: 0 0 8px rgba(0, 242, 254, 0.3);
+}
+
+.gamepad-button-value {
+  position: absolute;
+  right: 8px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 0.75rem;
+  color: var(--text-main);
+  z-index: 1;
+}
+
+/* ============================================================
+ * Sticks Radar Visualizer
+ * ============================================================ */
+
+#sticks {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 24px;
+}
+
+.gamepad-stick {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-color);
+  padding: 16px;
+  border-radius: 12px;
+  width: 220px;
+}
+
+.gamepad-stick-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+  font-family: var(--font-mono);
+}
+
+.gamepad-stick-label {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--text-main);
+}
+
+.gamepad-stick-values {
+  font-size: 0.75rem;
+  color: var(--accent-cyan);
+}
+
+.gamepad-stick-radar {
+  position: relative;
+  width: 220px;
+  height: 220px;
+  border-radius: 50%;
+  overflow: visible;
+  border: 1px solid var(--border-color);
+  box-sizing: border-box;
+  background:
+    radial-gradient(circle, rgba(0, 242, 254, 0.03) 0%, transparent 70%),
+    radial-gradient(
+      circle,
+      transparent 0 24%,
+      rgba(255, 255, 255, 0.05) 24.5% 25%,
+      transparent 25.5% 49%,
+      rgba(255, 255, 255, 0.05) 49.5% 50%,
+      transparent 50.5%
+    );
+}
+
+.gamepad-stick-ring {
+  position: absolute;
+  inset: 15%;
+  border: 1px dashed rgba(255, 255, 255, 0.1);
+  border-radius: 50%;
+}
+
+.gamepad-stick-crosshair {
+  position: absolute;
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.gamepad-stick-crosshair.horizontal {
+  left: 0;
+  right: 0;
+  top: 50%;
+  height: 1px;
+}
+
+.gamepad-stick-crosshair.vertical {
+  top: 0;
+  bottom: 0;
+  left: 50%;
+  width: 1px;
+}
+
+.gamepad-stick-grid::before,
+.gamepad-stick-grid::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  top: 0;
+  width: 1px;
+  height: 100%;
+  background: rgba(255, 255, 255, 0.05);
+  transform: rotate(45deg);
+}
+
+.gamepad-stick-grid::after {
+  transform: rotate(-45deg);
+}
+
+.gamepad-stick-dot {
+  position: absolute;
+  width: 14px;
+  height: 14px;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  border-radius: 50%;
+  background-color: var(--accent-color);
+  border: 2px solid #ffffff;
+  box-shadow:
+    0 0 10px var(--accent-color),
+    0 0 20px var(--accent-glow-strong);
+  pointer-events: none;
+  transition:
+    left 40ms linear,
+    top 40ms linear,
+    background-color 80ms ease,
+    box-shadow 80ms ease;
+}
+
+/* ============================================================
+ * Button Groups Layout
+ * ============================================================ */
+
+#button-groups {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 16px;
+}
+
+.button-group {
+  /* background: var(--bg-surface); */
+  border: 1px solid var(--border-color);
+  border-radius: 10px;
+  padding: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.button-group-header {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--accent-cyan);
+  border-bottom: 1px dashed var(--border-color);
+  padding-bottom: 6px;
+}
+
+.button-group-content {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+/* Container alignment */
+.gamepad-button-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  line-height: 1;
+  vertical-align: middle;
+}
+
+/* Normalized symbol box */
+.gamepad-button-label .symbol {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.2em;
+  height: 1.2em;
+  font-size: 1.1em;
+  line-height: 1;
+  font-family:
+    -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+}
+
+.app-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 16px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.app-title {
+  font-size: 1.25rem;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+  color: #ffffff;
+  margin: 0;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  text-transform: uppercase;
+}
+
+.title-icon {
+  font-size: 1.1rem;
+}
+
+.app-title .accent-text {
+  color: var(--accent-color);
+  transition:
+    color 0.3s ease,
+    text-shadow 0.3s ease;
+}
+
+.app-badge {
+  font-size: 0.65rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  padding: 2px 8px;
+  border-radius: 4px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: var(--text-muted, #a1a1aa);
+}
