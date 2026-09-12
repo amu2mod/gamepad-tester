@@ -68,3 +68,37 @@ const dualsense_mapping = [
     ""         // Button 31
 ];
 
+const switch_mapping = [
+    "B",       // Button 0
+    "A",       // Button 1
+    "Y",       // Button 2
+    "X",       // Button 3
+    "L",      // Button 4
+    "R",      // Button 5
+    "ZR",      // Button 6
+    "ZL",      // Button 7
+    "-",    // Button 8
+    "+",   // Button 9
+    "LS",      // Button 10
+    "RS",      // Button 11
+    "D-Up",    // Button 12
+    "D-Down",  // Button 13
+    "D-Left",  // Button 14
+    "D-Right", // Button 15
+    "Home",        // Button 16
+    "Capture",        // Button 17
+    "",        // Button 18 
+    "",        // Button 19
+    "",        // Button 20
+    "",        // Button 21
+    "",        // Button 22
+    "",        // Button 23
+    "",        // Button 24
+    "",        // Button 25
+    "",        // Button 26
+    "",        // Button 27
+    "",        // Button 28
+    "",        // Button 29
+    "",        // Button 30
+    ""         // Button 31
+];

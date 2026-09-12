@@ -108,7 +108,11 @@ function detectMapping(gamepad) {
 
     const id = gamepad.id.toLowerCase();
 
-    // 1. PlayStation detection (Name, "playstation", or Sony Vendor ID 054c)
+    // Nintendo Pro Controller
+    if (id.includes("057e") && id.includes("2009") || id.includes("pro controller"))
+        return "switch";
+
+    // PlayStation detection (Name, "playstation", or Sony Vendor ID 054c)
     if (id.includes("playstation") || id.includes("054c") || id.includes("dualshock"))
         return "dualsense";
 
@@ -349,6 +353,8 @@ function configureGamepadUI(gamepad) {
             buttonLabels[i] = xbox_mapping[i];
         else if (mapping === "dualsense" && i < dualsense_mapping.length && dualsense_mapping[i] !== "")
             buttonLabels[i] = dualsense_mapping[i];
+        else if (mapping === "switch" && i < switch_mapping.length && switch_mapping[i] !== "")
+            buttonLabels[i] = switch_mapping[i];
         else
             buttonLabels[i] = `Button ${i}`;
     }
